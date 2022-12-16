@@ -1,0 +1,43 @@
+- name: Install Helm
+  hosts: labsys-k1
+  remote_user: sysadmin
+  become: no
+  
+  vars:
+    app_name: "myapp"
+    release_name: "demo" 
+ 
+  tasks:
+
+  # Create a new chart - overwrite any existing ones
+  - name: Create new chart named {{ app_name }}
+    shell: helm create {{ app_name }}
+    register: helm_create
+  - debug: msg="{{ helm_create.stdout }}"
+    
+  - name: "Install {{ app_name }} chart with release name {{ release_name }}"
+    shell: "helm install {{ release_name }} {{ app_name }}"
+    ignore_errors: yes
+    register: helm_install
+
+  - debug: msg="{{ helm_install.stdout }}"
+
+  - name: Poll container status using kubectl. Output debug.
+    shell: "kubectl get pod -l=app.kubernetes.io/name={{ app_name }} -o=jsonpath='{.items[0].status.phase}'"
+    register: kubectl_status
+    loop: [ 1, 2, 3 ]
+    loop_control:
+      pause: 3
+
+  - debug: msg="{{ item.stdout }}"
+    with_items: "{{kubectl_status.results}}"
+
+  - name: List installed
+    shell: helm list
+    register: helm_list
+  - debug: msg="{{ helm_list.stdout }}"
+    
+  - name: Delete {{ release_name }}
+    shell: helm delete {{ release_name }}
+    register: helm_delete
+  - debug: msg="{{ helm_delete.stdout }}"

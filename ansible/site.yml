@@ -2,4 +2,5 @@
 # file: site.yml
 
 # - import_playbook: playbooks/kubernetes.yml
-- import_playbook: playbooks/helm.yml
+# - import_playbook: playbooks/helm.yml
+- import_playbook: playbooks/helm_app.yml
