@@ -1,0 +1,44 @@
+{
+    "networks": [
+        {
+            "id": "net0",
+            "name": "net0",
+            "ip_range": "10.90.0.0/16",
+            "subnet_ranges": [
+                "10.90.0.0/24"
+            ]
+        },
+        {
+            "id": "netk1",
+            "name": "netk1",
+            "ip_range": "10.91.0.0/16",
+            "subnet_ranges": [
+                "10.91.0.0/24"
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "id": "labsys-k1",
+            "state": "enabled",
+            "networks": [
+                { 
+                    "id" : "net0",
+                    "ip" : ""
+                },
+                { 
+                    "id" : "netk1",
+                    "ip" : ""
+                }
+            ],
+            "name": "labsys-k1",
+            "location": "nbg1",
+            "image": "ubuntu-22.04",
+            "server_type": "cx21",
+            "nodetype": "generic",
+            "network_zone": "eu-central",
+            "ssh_user": "sysadmin",
+            "ssh_port": "2222"
+        }
+    ]
+}
