@@ -11,9 +11,13 @@ module "networks" {
 }
 
 module "node_group" {
-  source     = "./modules/node_group"
-  nodes      = local.config_nodes
-  public_key = var.public_key
+  source      = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/node_group?ref=main"
+  nodes       = local.config_nodes
+  public_keys = [var.public_key]
+  sshd_config = {
+    ssh_user = "sysadmin"
+    ssh_port = "2222"
+  }
   networks_map = { for config_network in local.config_networks : config_network.id =>
     {
       name       = config_network.id,
