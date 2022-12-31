@@ -2,7 +2,7 @@
 
 module "networks" {
   for_each = local.config_networks
-  source   = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/network?ref=main"
+  source   = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/network?ref=1.0.2"
 
 
   network_name          = each.value.name
@@ -11,7 +11,7 @@ module "networks" {
 }
 
 module "node_group" {
-  source      = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/node_group?ref=main"
+  source      = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/node_group?ref=1.0.2"
   nodes       = local.config_nodes
   public_keys = [var.public_key]
   sshd_config = {

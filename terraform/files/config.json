@@ -15,10 +15,6 @@
             "state": "enabled",
             "networks": [
                 { 
-                    "id" : "net0",
-                    "ip" : ""
-                },
-                { 
                     "id" : "netk1",
                     "ip" : ""
                 }
