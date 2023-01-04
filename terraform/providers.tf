@@ -4,7 +4,7 @@ terraform {
   backend "local" {}
   required_providers {
     hcloud = {
-      source = "hetznercloud/hcloud"
+      source  = "hetznercloud/hcloud"
       version = "1.36.1"
     }
     hetznerdns = {

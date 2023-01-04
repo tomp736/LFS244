@@ -17,9 +17,7 @@ data "hetznerdns_zone" "dns_zone" {
 module "node_group" {
   source      = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/node_group?ref=1.0.4"
   nodes       = local.config_nodes
-  public_keys = [
-    var.public_key
-  ]
+  public_keys = var.public_keys
   sshd_config = {
     ssh_user = "sysadmin"
     ssh_port = "2222"

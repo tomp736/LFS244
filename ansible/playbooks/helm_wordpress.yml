@@ -32,6 +32,6 @@
 
   - debug: msg="{{ helm_install.stdout }}"
 
-  - name: "Delete {{ app_name }} chart with release name {{ release_name }}"
-    shell: "helm delete {{ release_name }}"
-    register: helm_install
+  # - name: "Delete {{ app_name }} chart with release name {{ release_name }}"
+  #   shell: "helm delete {{ release_name }}"
+  #   register: helm_install

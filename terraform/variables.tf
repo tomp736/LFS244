@@ -12,8 +12,8 @@ variable "hcloud_token_dns" {
   sensitive   = true
 }
 
-variable "public_key" {
+variable "public_keys" {
   description = "(Required) - Public key for testing."
-  type        = string
+  type        = list(string)
   sensitive   = true
 }

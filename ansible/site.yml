@@ -2,5 +2,3 @@
 # file: site.yml
 
  - import_playbook: playbooks/kubernetes.yml
- - import_playbook: playbooks/helm_app.yml
- - import_playbook: playbooks/helm_wordpress.yml
