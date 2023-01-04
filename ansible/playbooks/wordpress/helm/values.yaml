@@ -1,0 +1,7 @@
+global:
+  storageClass: wordpress-local
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30001

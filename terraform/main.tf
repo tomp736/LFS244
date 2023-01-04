@@ -2,7 +2,7 @@
 
 module "networks" {
   for_each = local.config_networks
-  source   = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/network?ref=1.0.2"
+  source   = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/network?ref=1.0.4"
 
 
   network_name          = each.value.name
@@ -15,9 +15,11 @@ data "hetznerdns_zone" "dns_zone" {
 }
 
 module "node_group" {
-  source      = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/node_group?ref=1.0.2"
+  source      = "git::https://github.com/labrats-work/modules-terraform.git//modules/hetzner/node_group?ref=1.0.4"
   nodes       = local.config_nodes
-  public_keys = [var.public_key]
+  public_keys = [
+    var.public_key
+  ]
   sshd_config = {
     ssh_user = "sysadmin"
     ssh_port = "2222"
@@ -30,7 +32,17 @@ module "node_group" {
   }
 }
 
-resource "hetznerdns_record" "dns_record" {
+resource "hetznerdns_record" "dns_record_main" {
+  for_each = module.node_group.nodes
+
+  zone_id = data.hetznerdns_zone.dns_zone.id
+  name    = "${each.value.name}.lfs244"
+  value   = each.value.ipv4_address
+  type    = "A"
+  ttl     = 60
+}
+
+resource "hetznerdns_record" "dns_record_wild" {
   for_each = module.node_group.nodes
 
   zone_id = data.hetznerdns_zone.dns_zone.id
