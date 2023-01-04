@@ -1,4 +1,4 @@
-- name: Install Helm
+- name: Install Helm Release for Wordpress
   hosts: labsys-k1
   remote_user: sysadmin
   become: false

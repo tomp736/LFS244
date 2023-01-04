@@ -2,4 +2,5 @@
 # file: apps.yml
 
  - import_playbook: playbooks/helm_app.yml
+ - import_playbook: playbooks/helm_registry.yml
  - import_playbook: playbooks/helm_wordpress.yml
