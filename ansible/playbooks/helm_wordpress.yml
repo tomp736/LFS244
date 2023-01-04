@@ -1,7 +1,7 @@
 - name: Install Helm
   hosts: labsys-k1
   remote_user: sysadmin
-  become: no
+  become: false
   
   vars:
     app_name: "bitnami/wordpress"
