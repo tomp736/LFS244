@@ -6,3 +6,4 @@ collections:
     type: git
     version: dev
   - name: community.general
+  - name: kubernetes.core

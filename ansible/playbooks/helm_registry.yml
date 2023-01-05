@@ -1,30 +1,27 @@
-- name: Install Helm Release for Registry
+- name: Install Docker-Registry using Helm
   hosts: labsys-k1
   remote_user: sysadmin
   become: false
-
-  vars:
-    app_name: "twuni/docker-registry"
-    release_name: "registry"
-    repo_name: twuni
-    repo_url: https://helm.twun.io
  
   tasks:
 
-  - name: Apply helm chart.
+  # Helm Repo
+
+  - name: Copy values.
     ansible.builtin.copy:
       src: "registry/helm/values.yaml"
       dest: "/tmp/registry_values.yaml"
 
-  - name: "Add helm repo"
-    shell: "helm repo add {{ repo_name }} {{ repo_url }}"
+  - name: Add docker-registry repo
+    kubernetes.core.helm_repository:
+      name: twuni
+      repo_url: https://helm.twun.io
 
-  - name: "Install {{ app_name }} chart with release name {{ release_name }}"
-    shell: "helm upgrade --install {{ release_name }} {{ app_name }} --wait -f /tmp/registry_values.yaml"
-    register: helm_install
-
-  - debug: msg="{{ helm_install.stdout }}"
-
-  # - name: "Delete {{ app_name }} chart with release name {{ release_name }}"
-  #   shell: "helm delete {{ release_name }}"
-  #   register: helm_install
+  - name: Deploy latest version of docker-registry chart inside default namespace
+    kubernetes.core.helm:
+      name: registry
+      chart_ref: twuni/docker-registry
+      release_namespace: default
+      wait: true
+      values_files:
+        - /tmp/registry_values.yaml

@@ -1,15 +1,11 @@
-- name: Install Helm Release for Wordpress
+- name: Install Wordpress using Helm
   hosts: labsys-k1
   remote_user: sysadmin
   become: false
-  
-  vars:
-    app_name: "bitnami/wordpress"
-    release_name: "wordpress"
-    repo_name: bitnami
-    repo_url: https://charts.bitnami.com/bitnami
  
-  tasks:    
+  tasks:
+
+  # Volumes
 
   - name: Init volumes.
     ansible.builtin.copy:
@@ -18,20 +14,23 @@
 
   - shell: "kubectl apply -f /tmp/storage.yaml"
 
-  - name: Apply helm chart.
+  # Helm Repo
+
+  - name: Copy values.
     ansible.builtin.copy:
       src: "wordpress/helm/values.yaml"
       dest: "/tmp/wordpress_values.yaml"
 
-  - name: "Add helm repo"
-    shell: "helm repo add {{ repo_name }} {{ repo_url }}"
+  - name: Add wordpress repo
+    kubernetes.core.helm_repository:
+      name: bitnami
+      repo_url: https://charts.bitnami.com/bitnami
 
-  - name: "Install {{ app_name }} chart with release name {{ release_name }}"
-    shell: "helm upgrade --install {{ release_name }} {{ app_name }} --wait -f /tmp/wordpress_values.yaml"
-    register: helm_install
-
-  - debug: msg="{{ helm_install.stdout }}"
-
-  # - name: "Delete {{ app_name }} chart with release name {{ release_name }}"
-  #   shell: "helm delete {{ release_name }}"
-  #   register: helm_install
+  - name: Deploy latest version of wordpress chart inside wordpress namespace
+    kubernetes.core.helm:
+      name: wordpress
+      chart_ref: bitnami/wordpress
+      release_namespace: default
+      wait: true
+      values_files:
+        - /tmp/wordpress_values.yaml
