@@ -1,0 +1,44 @@
+- name: Install Workspace for Lab5
+  hosts: labsys-k1
+  remote_user: sysadmin
+ 
+  tasks:
+
+  - name: Install Unzip
+    become: true
+    ansible.builtin.package:
+      name: unzip
+
+  - name: Install Docker
+    become: true
+    ansible.builtin.package:
+      name: docker-ce
+
+  - name: Extract workspace file.
+    ansible.builtin.unarchive:
+      src: "docker_localimage/workspace.zip"
+      dest: "~"
+
+  - name: Docker build
+    become: true
+    ansible.builtin.shell: docker build . -t localhost:32000/quotes:v1
+    args:
+      chdir: workspace
+
+  - name: docker push
+    become: true
+    ansible.builtin.shell: docker push localhost:32000/quotes:v1
+    args:
+      chdir: workspace
+
+  - name: Deploy latest version of wordpress chart inside wordpress namespace
+    kubernetes.core.helm:
+      name: quotegen
+      chart_ref: ~/workspace/quotegen
+      release_namespace: default
+      wait: true
+      values_files:
+        - ./workspace/quotegen/values.yaml
+
+  - name: helm test quotegen
+    ansible.builtin.shell: helm test quotegen

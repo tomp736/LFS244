@@ -1,0 +1,6 @@
+staticSitePVC: helm-data
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 32001
