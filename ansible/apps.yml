@@ -1,6 +1,8 @@
 ---
 # file: apps.yml
 
- - import_playbook: playbooks/helm_app.yml
- - import_playbook: playbooks/helm_registry.yml
- - import_playbook: playbooks/helm_wordpress.yml
+- import_playbook: playbooks/helm_app.yml
+- import_playbook: playbooks/helm_docker_registry.yml
+- import_playbook: playbooks/helm_wordpress.yml
+- import_playbook: playbooks/helm_docker_localimage.yml
+- import_playbook: playbooks/helm_chart_repo.yml

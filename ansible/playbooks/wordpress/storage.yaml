@@ -3,13 +3,12 @@ kind: StorageClass
 metadata:
   name: wordpress-local
 provisioner: kubernetes.io/no-provisioner
-reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: vol1
+  name: wordpress-app
 spec:
   storageClassName: wordpress-local
   accessModes:
@@ -17,33 +16,32 @@ spec:
   capacity:
     storage: 10Gi
   hostPath:
-    path: "/data/vol1"
+    path: "/data/wordpress/app"
   volumeMode: Filesystem
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: vol2
+  name: wordpress-mariadb
 spec:
   storageClassName: wordpress-local
   accessModes:
   - ReadWriteOnce
   capacity:
-    storage: 10Gi
+    storage: 8Gi
   hostPath:
-    path: "/data/vol2"
+    path: "/data/wordpress/mariadb"
   volumeMode: Filesystem
 ---
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: vol3
+  name: wordpress-app-data
 spec:
   storageClassName: wordpress-local
+  volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce
-  capacity:
-    storage: 10Gi
-  hostPath:
-    path: "/data/vol3"
-  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10Gi

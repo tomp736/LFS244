@@ -4,4 +4,17 @@ global:
 service:
   type: NodePort
   nodePorts:
-    http: 30001
+    http: 30005
+
+persistence:
+  existingClaim: wordpress-app-data
+
+mariadb:
+  auth:
+    rootPassword: "12f84c3e1ee0c1"
+    database: bitnami_wordpress
+    username: bn_wordpress
+    password: "55d8df67cbnwtwd"
+  primary:
+    persistence:
+      storageClass: wordpress-local

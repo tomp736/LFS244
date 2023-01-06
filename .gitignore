@@ -8,3 +8,4 @@ terraform.*
 
 terraform/ansible_hosts
 !ansible/inventory/README.md
+**/workspace.zip

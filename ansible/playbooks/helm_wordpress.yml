@@ -7,6 +7,16 @@
 
   # Volumes
 
+  - name: Create volume paths.
+    become: true
+    ansible.builtin.file:
+      path: "{{ item }}"
+      state: directory
+      mode: '0775'
+    loop:
+      - "/data/wordpress/app"
+      - "/data/wordpress/mariadb"
+
   - name: Init volumes.
     ansible.builtin.copy:
       src: "wordpress/storage.yaml"
@@ -34,3 +44,11 @@
       wait: true
       values_files:
         - /tmp/wordpress_values.yaml
+
+  # - name: Drop release
+  #   kubernetes.core.helm:
+  #     name: wordpress
+  #     chart_ref: bitnami/wordpress
+  #     release_namespace: default
+  #     release_state: absent
+  #     wait: true
