@@ -13,8 +13,15 @@
   - name: Create new chart named {{ app_name }}
     shell: helm create {{ app_name }}
     register: helm_create
-  - debug: msg="{{ helm_create.stdout }}"
-    
+  - debug: msg="{{ helm_create.stdout }}"    
+
+  - name: Deploy {{ app_name }} as {{ release_name }}
+    kubernetes.core.helm:
+      name: demo
+      chart_ref: ~/myapp
+      release_namespace: default
+      wait: true
+
   - name: "Install {{ app_name }} chart with release name {{ release_name }}"
     shell: "helm install {{ release_name }} {{ app_name }}"
     ignore_errors: true
@@ -37,7 +44,12 @@
     register: helm_list
   - debug: msg="{{ helm_list.stdout }}"
     
-  - name: Delete {{ release_name }}
-    shell: helm delete {{ release_name }}
+  - name: Drop {{ app_name }} as {{ release_name }}
+    kubernetes.core.helm:
+      name: demo
+      chart_ref: ~/myapp
+      release_namespace: default
+      release_state: absent
+      wait: true
     register: helm_delete
   - debug: msg="{{ helm_delete.stdout }}"

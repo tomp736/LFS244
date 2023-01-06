@@ -31,7 +31,7 @@
     args:
       chdir: workspace
 
-  - name: Deploy latest version of wordpress chart inside wordpress namespace
+  - name: Deploy quotegen from localpath
     kubernetes.core.helm:
       name: quotegen
       chart_ref: ~/workspace/quotegen
